@@ -3,23 +3,27 @@ const express = require('express');
 // Allows you to navigate filesystem via path.join()
 const bodyParser = require('body-parser');
 const path = require('path')
+
 // Initializing express engine
 const app = express()
 const port = process.env.PORT || 3000
 
 //MIDDLEWARE
 app.use(bodyParser.urlencoded({ extended: true }));
-//POST
+
+// Subscribe POST request handling
 app.post('/subscribe', (req, res, next) => {
-    body = req.body
-    email = body['email']
-    nombre = body['name']
-    console.log("Your email is " + email + "\nYour name is " + nombre)
-    next()
+    // Destructuring body object
+    let {email, name} = req.body
+    console.log("Your email is " + email + "\nYour name is " + name)
+    if(name && email){
+        return res.sendStatus(200);
+    }
+    return res.sendStatus(400);
 })
 
-// GET
-app.get('/subscribe', (req, res) => {
+// Subscribe GET request handling
+app.get('/subscribe', (req, res, next) => {
     // pass html to resolver as string
     res.sendFile(path.join(__dirname, '../public', "index.html"))
 })
