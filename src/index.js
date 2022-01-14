@@ -1,4 +1,5 @@
 const express = require('express')
+const path = require('path')
 const fs = require('fs');
 const app = express()
 const port = process.env.PORT || 3000
@@ -12,20 +13,17 @@ const event = {
     }
 }
 
+// Makes contents of /public available in browser
+app.use(express.static(path.join(__dirname, "../public")))
+
 // GET
-app.get('', (req, res) =>{
-    // read html from src
-    var indexHtml = fs.readFileSync('src/index.html')
-
+app.get('', (req, res) => {
     // pass html to resolver as string
-    res.sendFile(__dirname + "/index.html")
+    res.sendFile(path.join(__dirname, '../public', "index.html"))
 
-    // set 'x' property of event object to desired message and print
     event.x = 'Inside GET Request'
     event.print()
 })
 
 // LISTENER
-app.listen(port, () => {
-    console.log('Server is up on port '+ port)
-})
+app.listen(port, () => console.log('Server is up on port '+ port))
