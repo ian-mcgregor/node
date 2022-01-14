@@ -1,29 +1,41 @@
-const express = require('express')
-const path = require('path')
-const fs = require('fs');
+// Modules
+const express = require('express');
+// Allows you to navigate filesystem via path.join()
+const bodyParser = require('body-parser');
+// Initializing express engine
 const app = express()
 const port = process.env.PORT || 3000
 
-// Object containing a print helper function
-// Displays syntax for defining properties of an object, including functions.
-const event = {
-    x : '',
-    print() { 
-        console.log(this.x)
-    }
-}
-
-// Makes contents of /public available in browser
-app.use(express.static(path.join(__dirname, "../public")))
+//MIDDLEWARE
+app.use(bodyParser.urlencoded({ extended: true }));
+//POST
+app.post('/subscribe', (req, res, next) => {
+    body = req.body
+    email = body['email']
+    nombre = body['name']
+    console.log("Your email is " + email + "\nYour name is " + nombre)
+    next()
+})
 
 // GET
-app.get('', (req, res) => {
+app.use('/subscribe', (req, res) => {
     // pass html to resolver as string
     res.sendFile(path.join(__dirname, '../public', "index.html"))
-
-    event.x = 'Inside GET Request'
-    event.print()
 })
+
+// Homepage
+app.use('/', (req, res, next) => {
+    res.send("\
+    <h1> Express|sserpxE <h1/>\
+    <form method='get' action='/subscribe'>\
+    <button type='submit'>Subscribe Here</button>\
+    </form>\
+    ")
+});
+// app.use((req, res, next) => {
+//     res.send("<h1> hello from middleware2 <h1/>")
+    
+// });
 
 // LISTENER
 app.listen(port, () => console.log('Server is up on port '+ port))
