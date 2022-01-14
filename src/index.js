@@ -2,6 +2,7 @@
 const express = require('express');
 // Allows you to navigate filesystem via path.join()
 const bodyParser = require('body-parser');
+const path = require('path')
 // Initializing express engine
 const app = express()
 const port = process.env.PORT || 3000
@@ -18,7 +19,7 @@ app.post('/subscribe', (req, res, next) => {
 })
 
 // GET
-app.use('/subscribe', (req, res) => {
+app.get('/subscribe', (req, res) => {
     // pass html to resolver as string
     res.sendFile(path.join(__dirname, '../public', "index.html"))
 })
